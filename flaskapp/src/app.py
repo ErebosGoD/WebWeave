@@ -1,4 +1,3 @@
-from get_weather import get_weather
 from flask import Flask, redirect, render_template, url_for, request
 import requests
 
@@ -15,13 +14,16 @@ def weather():
     return render_template('weather.html')
 
 
-@app.route("/get-weather")
+@app.route("/get-weather", methods=["POST", "GET"])
 def get_weather():
-    api_key = "key"
+    api_key = "deb143ec8c4f97aab4a9368f770ef498"
     location = request.form.get('location')
     zipcode = request.form.get('zipcode')
-    weather_data = requests.get(
+    response = requests.get(
         f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit={1}&appid={api_key}")
+    data = response.json()
+    print(data)
+    return data
 
 
 if __name__ == "__main__":
