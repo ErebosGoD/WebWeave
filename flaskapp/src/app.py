@@ -16,14 +16,18 @@ def weather():
 
 @app.route("/get-weather", methods=["POST", "GET"])
 def get_weather():
-    api_key = "deb143ec8c4f97aab4a9368f770ef498"
+    api_key = "key"
     location = request.form.get('location')
-    zipcode = request.form.get('zipcode')
-    response = requests.get(
+    location_response = requests.get(
         f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit={1}&appid={api_key}")
-    data = response.json()
-    print(data)
-    return data
+    data = location_response.json()
+    latitude = data[0]["lat"]
+    longitude = data[0]["lon"]
+    forecast_response = requests.get(
+        f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}")
+    forecast_data = forecast_response.json()
+
+    return forecast_data
 
 
 if __name__ == "__main__":
