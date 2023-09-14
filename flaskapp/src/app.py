@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, url_for, request
+from flask import Flask, redirect, render_template, url_for, request, jsonify
 import requests
 
 app = Flask(__name__, template_folder='templates')
@@ -24,10 +24,10 @@ def get_weather():
     latitude = data[0]["lat"]
     longitude = data[0]["lon"]
     forecast_response = requests.get(
-        f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}")
+        f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}&units=metric")
     forecast_data = forecast_response.json()
 
-    return forecast_data
+    return jsonify(forecast_data["main"]["temp"], forecast_data["main"]["feels_like"], forecast_data["weather"][0]["description"])
 
 
 if __name__ == "__main__":
