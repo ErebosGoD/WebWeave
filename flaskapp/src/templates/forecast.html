@@ -4,11 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Forecast for {{location}}</title>
 </head>
 
-<body>
-
+<body id="forecast-body">
+    <div class="weather-container">
+        <h1>Forecast for {{location}}</h1>
+        <div id="forecast">
+            <img src="{{ url_for('static', filename='icons/' + svg_name) }}" alt="weather-icon" class="icon">
+        </div>
+        <div>
+            <strong>Temperature:</strong> {{forecast['main']['temp']}}°C
+        </div>
+        <div>
+            <strong>Feels like:</strong> {{forecast['main']['feels_like']}}°C
+        </div>
+        <div>
+            <strong>Humidity:</strong> {{forecast['main']['humidity']}}%
+        </div>
+        <div>
+            <strong>Wind Speed:</strong> {{forecast['wind']['speed']}} m/s
+        </div>
+        <!-- <div id="weather-map">
+            <img src="{{ url_for('static', filename='weathermap.png') }}" alt="weather-map" class="weatherMap">
+        </div> -->
+    </div>
 </body>
 
 </html>

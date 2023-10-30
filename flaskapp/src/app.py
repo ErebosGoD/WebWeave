@@ -1,5 +1,7 @@
 from flask import Flask, redirect, render_template, url_for, request, jsonify
-import requests
+from datetime import datetime, timedelta
+from get_weather import WeatherForecast
+from config import openweather_apikey
 
 app = Flask(__name__, template_folder='templates')
 
@@ -14,21 +16,38 @@ def weather():
     return render_template('weather.html')
 
 
+@app.route("/time-calculator")
+def time_calculator():
+    return render_template("timecalculator.html")
+
+
 @app.route("/get-weather", methods=["POST", "GET"])
 def get_weather():
-    api_key = "key"
-    location = request.form.get('location')
-    location_response = requests.get(
-        f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit={1}&appid={api_key}")
-    data = location_response.json()
-    latitude = data[0]["lat"]
-    longitude = data[0]["lon"]
-    forecast_response = requests.get(
-        f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}&units=metric")
-    forecast_data = forecast_response.json()
+    location = request.form.get("location")
+    forecast, icon_name = weather_forecast.get_weather_forecast(
+        location,openweather_apikey)
+    
+    return render_template("forecast.html",forecast=forecast,svg_name=icon_name,location=location)
 
-    return jsonify(forecast_data["main"]["temp"], forecast_data["main"]["feels_like"], forecast_data["weather"][0]["description"])
+
+@app.route("/calculate-time", methods=["POST", "GET"])
+def calculate_time():
+    start_time = request.form.get("start-time")
+    work_hours = int(request.form.get("work-hours"))
+    work_minutes = int(request.form.get("work-minutes"))
+    break_in_minutes = int(request.form.get("break-in-minutes"))
+    overtime_hours = int(request.form.get("overtime-hours"))
+    overtime_minutes = int(request.form.get("overtime-minutes"))
+    work_hours = work_hours - overtime_hours
+    work_minutes = work_minutes + break_in_minutes - overtime_minutes
+
+    start_time_obj = datetime.strptime(start_time, '%H:%M')
+    time_difference = timedelta(hours=work_hours, minutes=work_minutes)
+    clock_off_time = start_time_obj + time_difference
+    response_data = {"result": clock_off_time.strftime('%H:%M')}
+    return jsonify(response_data)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    weather_forecast = WeatherForecast()
+    app.run()

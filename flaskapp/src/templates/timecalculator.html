@@ -4,11 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clock-Off Calculator</title>
+    <script src="{{ url_for('static', filename='javascript/timeCalculatorScripts.js') }}"></script>
 </head>
 
 <body>
+    <form action="/calculate-time" method="post">
+        <label for="start-time">Start-Time:</label>
+        <input type="time" id="start-time" name="start-time" required>
+        <br>
+        <label for="work-hours">Work-Hours:</label>
+        <input type="number" id="work-hours" name="work-hours" required>
+        <br>
+        <label for="work-minutes">Work-Minutes:</label>
+        <input type="number" id="work-minutes" name="work-minutes" required>
+        <br>
+        <label for="break-in-minutes">Break-in-Minutes:</label>
+        <input type="number" id="break-in-minutes" name="break-in-minutes" required>
+        <br>
+        <label for="overtime-hours">Overtime-Hours:</label>
+        <input type="number" id="overtime-hours" name="overtime-hours" required>
+        <br>
+        <label for="overtime-minutes">Overtime-Minutes:</label>
+        <input type="number" id="overtime-minutes" name="overtime-minutes" required>
+        <br>
+        <button type="submit">Calculate</button>
+    </form>
 
+    <div id="result"></div>
 </body>
 
 </html>
