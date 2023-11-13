@@ -8,27 +8,41 @@
     <title>Forecast for {{location}}</title>
 </head>
 
-<body id="forecast-body">
+<body class="forecast-body">
     <div class="weather-container">
         <h1>Forecast for {{location}}</h1>
-        <div id="forecast">
+        <div class="forecast">
             <img src="{{ url_for('static', filename='icons/' + svg_name) }}" alt="weather-icon" class="icon">
+            <div>
+                <strong>Temperature:</strong> {{current_forecast['main']['temp']}}°C
+            </div>
+            <div>
+                <strong>Feels like:</strong> {{current_forecast['main']['feels_like']}}°C
+            </div>
+            <div>
+                <strong>Humidity:</strong> {{current_forecast['main']['humidity']}}%
+            </div>
+            <div>
+                <strong>Wind Speed:</strong> {{current_forecast['wind']['speed']}} m/s
+            </div>
         </div>
-        <div>
-            <strong>Temperature:</strong> {{forecast['main']['temp']}}°C
+
+        <div class="five_day_forecast">
+            {% for day in days %}
+            <div class="day-container">
+                <div class="day-info">
+                    <p><strong>{{ day.dt.split(' ')[0] }}</strong> </p>
+                    <img src="{{ url_for('static', filename='icons/' + day.icon_filename) }}" alt="weather-icon"
+                        class="five_day_icon">
+                    <p><strong>Temperature:</strong> {{ day.main.temp }}°C</p>
+                    <p><strong>Feels like:</strong> {{ day.main.feels_like }}°C</p>
+                    <p><strong>Humidity:</strong> {{ day.main.humidity }}%</p>
+                    <p><strong>Wind Speed:</strong> {{ day.wind.speed }} m/s</p>
+                </div>
+
+            </div>
+            {% endfor %}
         </div>
-        <div>
-            <strong>Feels like:</strong> {{forecast['main']['feels_like']}}°C
-        </div>
-        <div>
-            <strong>Humidity:</strong> {{forecast['main']['humidity']}}%
-        </div>
-        <div>
-            <strong>Wind Speed:</strong> {{forecast['wind']['speed']}} m/s
-        </div>
-        <!-- <div id="weather-map">
-            <img src="{{ url_for('static', filename='weathermap.png') }}" alt="weather-map" class="weatherMap">
-        </div> -->
     </div>
 </body>
 

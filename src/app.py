@@ -24,10 +24,10 @@ def time_calculator():
 @app.route("/get-weather", methods=["POST", "GET"])
 def get_weather():
     location = request.form.get("location")
-    forecast, icon_name = weather_forecast.get_weather_forecast(
+    current_forecast, icon_name,days = weather_forecast.get_weather_forecast(
         location,openweather_apikey)
     
-    return render_template("forecast.html",forecast=forecast,svg_name=icon_name,location=location)
+    return render_template("forecast.html",current_forecast=current_forecast,svg_name=icon_name,location=location,days=days)
 
 
 @app.route("/calculate-time", methods=["POST", "GET"])
